@@ -1,6 +1,7 @@
 package com.gfg.JBCMajorProject.JBCMajorProject.service;
 
 import com.gfg.JBCMajorProject.JBCMajorProject.dao.TwitterDao;
+import com.gfg.JBCMajorProject.JBCMajorProject.db.Persistable;
 import com.gfg.JBCMajorProject.JBCMajorProject.model.TwitterRecipient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,10 @@ public class TwitterService {
     @Autowired
     TwitterDao twitterDao;
 
+    @Autowired
+    Persistable persistable;
+
+
     public List<String> getTimelineFromDao(Twitter twitter) throws TwitterException {
 
         List<String> list;
@@ -25,6 +30,12 @@ public class TwitterService {
     public String sendDMFromDao(TwitterRecipient recipient, Twitter twitter) throws TwitterException {
 
         return twitterDao.sendDirectMessage(recipient,twitter);
+    }
+
+    public String saveInRedis(Twitter twitter) throws TwitterException {
+
+        persistable.persist(twitter);
+        return "Succesfully saved timeline";
     }
 
 }

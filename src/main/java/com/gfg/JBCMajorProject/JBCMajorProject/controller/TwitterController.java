@@ -2,8 +2,10 @@ package com.gfg.JBCMajorProject.JBCMajorProject.controller;
 
 
 import com.gfg.JBCMajorProject.JBCMajorProject.model.TwitterRecipient;
+import com.gfg.JBCMajorProject.JBCMajorProject.repository.RedisConnection;
 import com.gfg.JBCMajorProject.JBCMajorProject.service.TwitterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import twitter4j.*;
 
@@ -15,7 +17,8 @@ public class TwitterController {
     @Autowired
     TwitterService twitterService;
 
-
+    @Autowired
+    RedisConnection redisConnection;
 
     private Twitter twitter= TwitterFactory.getSingleton();
     @PostMapping("/createTweet/{tweet}")
@@ -37,4 +40,8 @@ public class TwitterController {
         return twitterService.sendDMFromDao(recipient,twitter);
     }
 
+    @PostMapping("/saveRedis")
+    public String saveToRedis() throws TwitterException {
+        return twitterService.saveInRedis(twitter);
+    }
 }
